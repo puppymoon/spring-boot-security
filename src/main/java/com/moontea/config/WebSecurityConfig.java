@@ -3,9 +3,11 @@ package com.moontea.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+@EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
@@ -23,8 +25,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				// ... 中間配置省略
 				.and()
 				// 添加過濾器，針對/login的請求，交給LoginFilter處理
-				.addFilterBefore(new LoginFilter("/login", authenticationManager()),
-						UsernamePasswordAuthenticationFilter.class)
+				.addFilterBefore(new LoginFilter("/login", authenticationManager()),UsernamePasswordAuthenticationFilter.class)
 				// 添加過濾器，針對其他請求進行JWT的驗證
 				.addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 	}

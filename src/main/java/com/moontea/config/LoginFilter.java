@@ -1,8 +1,25 @@
 package com.moontea.config;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import com.alibaba.fastjson.JSONObject;
+
 public class LoginFilter extends AbstractAuthenticationProcessingFilter{
 	
-	public JWTLoginFilter(String url, AuthenticationManager authManager) {
+	public LoginFilter(String url, AuthenticationManager authManager) {
         super(new AntPathRequestMatcher(url));
         setAuthenticationManager(authManager);
     }
@@ -46,6 +63,12 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter{
 
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.getOutputStream().println(JSONResult.fillResultString(401, "Loing error!!!", JSONObject.NULL));
+        PrintWriter out = response.getWriter();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("status", "401");
+        jsonObject.put("message", "Loing error!!!");
+        out.print(jsonObject.toJSONString());
+        out.flush();
+        out.close();
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 	
+	
 	@Autowired
 	private UserLoginService userLoginService;
 	
